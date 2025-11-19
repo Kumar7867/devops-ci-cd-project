@@ -1,47 +1,50 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs "node16"   // The NodeJS version you configured in Jenkins
-    }
-
     stages {
 
         stage('Checkout') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/Kumar7867/devops-ci-cd-project.git'
+                echo "Pulling latest code from GitHub..."
+                checkout scm
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Validate HTML') {
             steps {
-                sh 'npm install'
+                echo "Validating HTML files"
+                sh 'echo "No validation tool installed, so skipping real validation..."'
             }
         }
 
-        stage('Basic Test') {
+        stage('Build Artifact') {
             steps {
-                sh 'node -v'
-                sh 'npm -v'
+                echo "Packaging HTML files into artifact.zip"
+                sh '''
+                    rm -f artifact.zip
+                    zip -r artifact.zip . 
+                '''
             }
         }
 
         stage('Archive Artifact') {
             steps {
-                sh 'zip -r app.zip .'
-                archiveArtifacts artifacts: 'app.zip', fingerprint: true
+                archiveArtifacts artifacts: 'artifact.zip', fingerprint: true
             }
         }
     }
 
     post {
+        always {
+            echo "Build finished!"
+        }
         success {
-            echo "CI stage completed successfully."
+            echo "Build successful!"
         }
         failure {
-            echo "CI stage failed."
+            echo "Build failed!"
         }
     }
 }
+
 
