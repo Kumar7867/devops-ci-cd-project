@@ -1,0 +1,37 @@
+---
+- name: Deploy artifact to EC2 webserver
+  hosts: webserver
+  become: yes
+
+  tasks:
+
+    - name: Copy artifact.zip from Jenkins workspace to EC2
+      copy:
+        src: "{{ playbook_dir }}/artifact.zip"
+        dest: /tmp/artifact.zip
+        mode: '0644'
+
+    - name: Remove old website content
+      file:
+        path: /var/www/html
+        state: absent
+
+    - name: Recreate website directory
+      file:
+        path: /var/www/html
+        state: directory
+        mode: '0755'
+
+    - name: Unzip artifact.zip to /var/www/html
+      unarchive:
+        src: /tmp/artifact.zip
+        dest: /var/www/html
+        remote_src: yes
+
+    - name: Set permissions
+      file:
+        path: /var/www/html
+        state: directory
+        recurse: yes
+        owner: www-data
+        group: www-data

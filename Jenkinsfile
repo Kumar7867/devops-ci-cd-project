@@ -34,6 +34,13 @@ pipeline {
         }
     }
 
+         stage('Deploy to EC2') {
+            steps {
+                echo "Running Ansible playbook to deploy to EC2"
+                sh 'ansible-playbook ~/devops-project/deploy.yml'
+            }
+        }
+    }
     post {
         always {
             echo "Build finished!"
