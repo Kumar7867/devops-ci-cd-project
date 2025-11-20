@@ -32,7 +32,7 @@ pipeline {
                 archiveArtifacts artifacts: 'artifact.zip', fingerprint: true
             }
         }
-    }
+    
 
          stage('Deploy to EC2') {
             steps {
