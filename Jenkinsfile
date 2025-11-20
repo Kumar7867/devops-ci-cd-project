@@ -33,7 +33,6 @@ pipeline {
             }
         }
     
-
          stage('Deploy to EC2') {
             steps {
                 echo "Running Ansible playbook to deploy to EC2"
