@@ -22,7 +22,7 @@ pipeline {
                 echo "Packaging HTML files into artifact.zip"
                 sh '''
                     rm -f artifact.zip
-                    zip -r artifact.zip . 
+                    zip -r artifact.zip .
                 '''
             }
         }
@@ -32,14 +32,15 @@ pipeline {
                 archiveArtifacts artifacts: 'artifact.zip', fingerprint: true
             }
         }
-    
-         stage('Deploy to EC2') {
+
+        stage('Deploy to EC2') {
             steps {
                 echo "Running Ansible playbook to deploy to EC2"
                 sh 'ansible-playbook ~/devops-project/deploy.yml'
             }
         }
     }
+
     post {
         always {
             echo "Build finished!"
