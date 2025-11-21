@@ -33,7 +33,12 @@ pipeline {
             }
         }
 
-        stage('Deploy to EC2') {
+       stage('Copy Artifact to Ansible Folder') {
+    steps {
+        sh 'cp artifact.zip ~/devops-project/'
+    }
+}
+ stage('Deploy to EC2') {
             steps {
                 echo "Running Ansible playbook to deploy to EC2"
                 sh 'ansible-playbook ~/devops-project/deploy.yml'
