@@ -33,30 +33,24 @@ pipeline {
             }
         }
 
-       stage('Copy Artifact to Ansible Folder') {
-    steps {
-        sh 'cp artifact.zip ~/devops-project/'
-    }
-}
- stage('Deploy to EC2') {
+        stage('Copy Artifact to Ansible Folder') {
+            steps {
+                sh 'cp artifact.zip /var/lib/jenkins/devops-project/artifact.zip'
+            }
+        }
+
+        stage('Deploy to EC2') {
             steps {
                 echo "Running Ansible playbook to deploy to EC2"
-                sh 'ansible-playbook ~/devops-project/deploy.yml'
+                sh 'ansible-playbook /var/lib/jenkins/devops-project/deploy.yml'
             }
         }
     }
 
     post {
-        always {
-            echo "Build finished!"
-        }
-        success {
-            echo "Build successful!"
-        }
-        failure {
-            echo "Build failed!"
-        }
+        always { echo "Build finished!" }
+        success { echo "Build successful!" }
+        failure { echo "Build failed!" }
     }
 }
-
 
